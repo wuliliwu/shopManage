@@ -140,16 +140,19 @@
       open4(msg) {
         this.$message.error(msg);
       },
-      open2(msg) {
-        this.$message.error(msg);
+      open2() {
+        this.$message({
+          message: '恭喜你，添加成功!',
+          type: 'success'
+        });
       },
       onSubmit() {
         addGoods(this.addInfo).then(res =>{
           console.log(res)
           if (res.status == 400){
             this.open4(res.msg)
-          }else{
-            this.open2(res.msg)
+          }else if(res.status == 200){
+            this.open2()
           }
         })
       },

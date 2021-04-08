@@ -4,7 +4,7 @@
     <h4 style="text-align: left;border-bottom: 1px solid #ccc;padding: 10px 0">
       <i class="el-icon-edit-outline"></i>
       商品类型数据列表</h4>
-    <el-button size="primary">添加</el-button>
+    <el-button size="primary" @click="addgoods">添加</el-button>
   </div>
   <el-table
 
@@ -49,7 +49,7 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          @click="handleEdit(scope.row.id, scope.row)">编辑</el-button>
         <el-button
           size="mini"
           type="danger"
@@ -78,12 +78,12 @@
                   <el-form-item label="商品名称">
                     <el-input v-model="editForm.name"></el-input>
                   </el-form-item>
-                    <el-form-item label="属性数量">
-                    <el-input v-model="editForm.attribute_count"></el-input>
+<!--                    <el-form-item label="属性数量">-->
+<!--                    <el-input v-model="editForm.attribute_count"></el-input>-->
 
-                  </el-form-item><el-form-item label="参数数量" >
-                    <el-input v-model="editForm.params_count"></el-input>
-                  </el-form-item>
+<!--                  </el-form-item><el-form-item label="参数数量" >-->
+<!--                    <el-input v-model="editForm.params_count"></el-input>-->
+<!--                  </el-form-item>-->
                 </el-form>
             </span>
     <span slot="footer" class="dialog-footer">
@@ -91,27 +91,53 @@
         <el-button type="primary" @click="sureEditTable()" >确 定</el-button>
   </span>
   </el-dialog>
+
+<!--  添加商品类型的对话框-->
+  <el-dialog
+    title="添加商品分类信息"
+    :visible.sync="addgoodsdia"
+    ref="addAttrDia"
+    width="50%">
+            <span>
+               <el-form :model="addForm" ref="editFormRef" label-width="70px" >
+                  <el-form-item label="商品名称">
+                    <el-input v-model="addForm.name"></el-input>
+                  </el-form-item>
+                </el-form>
+            </span>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="closeAttr">取 消</el-button>
+        <el-button type="primary" @click="sureattr()" >确 定</el-button>
+  </span>
+  </el-dialog>
+
+
 </div>
 </template>
 
 <script>
-  import {productAttr,editAttr} from "utils/getgoods";
+  import {productAttr,editAttr,addAttr} from "utils/getgoods";
   export default {
     name: "goodsAttr",
     data() {
       return {
         proCate:[],
         queryInfo:{
-          pageSize:3,
+          pageSize:6,
           pageNum:1
 
         },
         total:0,
         EditdialogVisible:false,
+        addgoodsdia:false,
         editForm:{
+          id:0,
           name:'',//名称
-          attribute_count:0,//属性数量
-          params_count:0 //参数数量
+        },
+        addForm:{
+          name:"",//名称
+          // attribute_count:0,//属性数量
+          // params_count:0 //参数数量
         }
       }
     },
@@ -126,6 +152,9 @@
          this.total = res.total
         })
       },
+      addgoods() {
+        this.addgoodsdia = true
+      },
       handleSizeChange(num) {
         // console.log(num)
         this.queryInfo.pageSize = num
@@ -137,19 +166,32 @@
         this.queryInfo.pageNum = num
         this.getDate()
       },
-      handleEdit(index,item) {
+      handleEdit(id,item) {
         this.EditdialogVisible=true
         this.editForm.name = item.name
-        this.editForm.attribute_count = item.attribute_count
-        this.editForm.params_count = item.param_count
+        this.editForm.id = id
+        // this.editForm.attribute_count = item.attribute_count
+        // this.editForm.params_count = item.param_count
       },
       sureEditTable() {
         // 发送修改的网络请求
         editAttr(this.editForm).then((res)=> {
-          console.log(res)
           this.EditdialogVisible=false
           this.getDate()
+        })
+      },
+      closeAttr() {
+        this.addgoodsdia = false
+        this.addForm.name = ''
+        this.addForm.attribute_count='',
+        this.addForm.params_count = ''
 
+      },
+      sureattr() {
+        console.log('点击了确定')
+        this.addgoodsdia = false
+        addAttr(this.addForm).then(res => {
+          console.log(res)
         })
       }
 

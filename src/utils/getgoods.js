@@ -51,21 +51,80 @@ export function getcateChild() {
 
 // http://10.36.136.83:8001/index/Api/create_product
 // 添加一条商品信息的函数
-export function addGoods(params) {
+export function addGoods(data) {
   return request({
     url:'/create_product',
-    params:params,
+    // params:params,
+    data:data,
     method:'post'
   })
 }
 
 // url 地址：http://10.36.136.83:8001/index/Api/update_product_attr
 // 修改商品类型的接口
-
-export function editAttr(params) {
+export function editAttr(data) {
   return request({
     url:'/update_product_attr',
+    // params:params,
+    data:data,
+    method:'post'
+  })
+}
+
+// 添加商品类型的数据接口
+// url 地址：http://10.36.136.83:8001/index/Api/create_product_attr
+//   参    数：添加的商品类型数据
+// {
+//   "name":"***",//名称
+//   "attribute_count":0,//属性数量
+//   "params_count":0} //参数数量
+// 请求方式：post
+
+export function addAttr(data) {
+  return request({
+    url:'/create_product_attr',
+    // params:params,
+    data:data,
+    method:'post'
+  })
+}
+// 添加一条商品类型
+export function addCate(data) {
+  return request({
+    url:'/create_product_cate',
+    data:data,
+    method:'post'
+  })
+}
+
+//
+// ## 21.修改品牌管理数据
+//
+// url 地址：http://10.36.136.83:8001/index/Api/update_product_brand
+export function editBrand(data) {
+  return request({
+    url:'/update_product_brand',
+    data:data,
+    method:'post'
+  })
+}
+
+
+// 获取一条品牌管理得信息
+
+export function getOneBrand(params) {
+  return request({
+    url:'/brand_one',
     params:params,
+    method:'get'
+  })
+}
+
+// delete_category 删除分类
+export function deleteoneCate(data) {
+  return request({
+    url:'/delete_category',
+    data:data,
     method:'post'
   })
 }
